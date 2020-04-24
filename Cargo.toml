@@ -3,7 +3,11 @@ name = "bungmunger"
 version = "0.1.0"
 authors = ["stuart nelson <stuartnelson3@gmail.com>"]
 edition = "2018"
+description = "munge trajectory data from xlsx files and output them to xml file"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+calamine = "^0.16"
+quick-xml = "^0.18"
