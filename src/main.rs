@@ -1,7 +1,9 @@
 extern crate calamine;
+extern crate chrono;
 extern crate clap;
 
 use calamine::{open_workbook, Reader, Xlsx};
+use chrono::prelude::*;
 use clap::{App, Arg};
 use std::fs::File;
 use std::io::prelude::*;
@@ -14,7 +16,9 @@ struct Track {
 
 impl Track {
     fn xml(&self) -> String {
-        // make sure this is strings joined by newlines.
+        let utc: DateTime<Utc> = Utc::now();
+        let formatted_date = utc.format("%a, %e %b %Y %T").to_string();
+
         let particles = self
             .particles
             .iter()
@@ -22,8 +26,9 @@ impl Track {
             .collect::<Vec<String>>()
             .join("\n");
         format!(
-            "<Tracks nTracks='{}' spaceUnits='pixel' frameInterval='1.0' timeUnits='frame' generationDateTime='Fr, 13 Mai 2016 21:49:25' from='TrackMate v2.8.1'>\n{}\n</Tracks>",
+            "<Tracks nTracks='{}' spaceUnits='pixel' frameInterval='1.0' timeUnits='frame' generationDateTime='{}' from='TrackMate v2.8.1'>\n{}\n</Tracks>",
             self.particles.len(),
+            formatted_date,
             particles
         )
     }
