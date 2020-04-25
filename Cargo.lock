@@ -11,7 +11,6 @@ name = "bungmunger"
 version = "0.1.0"
 dependencies = [
  "calamine",
- "quick-xml 0.18.1",
 ]
 
 [[package]]
@@ -30,7 +29,7 @@ dependencies = [
  "codepage",
  "encoding_rs",
  "log",
- "quick-xml 0.17.2",
+ "quick-xml",
  "serde",
  "zip",
 ]
@@ -123,15 +122,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fe1e430bdcf30c9fdc25053b9c459bb1a4672af4617b6c783d7d91dc17c6bbb0"
 dependencies = [
  "encoding_rs",
- "memchr",
-]
-
-[[package]]
-name = "quick-xml"
-version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3cc440ee4802a86e357165021e3e255a9143724da31db1e2ea540214c96a0f82"
-dependencies = [
  "memchr",
 ]
 
