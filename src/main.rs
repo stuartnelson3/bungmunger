@@ -106,7 +106,10 @@ fn main() {
         Ok(file) => file,
     };
 
-    let mut excel: Xlsx<_> = open_workbook(input).unwrap();
+    let mut excel: Xlsx<_> = match open_workbook(input) {
+        Ok(excel) => excel,
+        Err(e) => panic!("couldn't open {}: {}", input, e),
+    };
 
     println!(
         "===> bung munging\n===> source file: {}",
@@ -115,6 +118,8 @@ fn main() {
 
     let range = match excel.worksheet_range_at(0) {
         Some(Ok(r)) => {
+            // Find the first cell with "frame" written in it. The positional data starts in the
+            // row directly after that.
             match r
                 .rows()
                 .enumerate()
@@ -123,6 +128,8 @@ fn main() {
                     None => false,
                 }) {
                 Some((idx, _)) => {
+                    // We've found the row with "frame", so resize the worksheet to that row+1,
+                    // where the data begins.
                     let start = ((idx + 1) as u32, 0);
                     let end = r.end().unwrap();
                     r.range(start, end)
@@ -145,7 +152,7 @@ fn main() {
             // new particle, add to vec
             particles.push(Particle { detections: vec![] });
         }
-        // append to the last particle in our vec
+        // append to the most recently created, or last particle in our vec
         let len = particles.len();
         let particle = &mut particles[len - 1];
 
