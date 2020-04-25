@@ -1,6 +1,11 @@
 extern crate calamine;
+extern crate clap;
 
 use calamine::{open_workbook, Reader, Xlsx};
+use clap::{App, Arg};
+use std::fs::File;
+use std::io::prelude::*;
+use std::path::Path;
 
 #[derive(Debug)]
 struct Track {
@@ -63,7 +68,40 @@ impl Detection {
 }
 
 fn main() {
-    let mut excel: Xlsx<_> = open_workbook("example.xlsx").unwrap();
+    let matches = App::new("bungmunger")
+        .version("0.1.0")
+        .author("stuart nelson <stuartnelson3@gmail.com>")
+        .about("munges xlsx trajectory files into xml")
+        .arg(
+            Arg::with_name("i")
+                .short("i")
+                .long("in-file")
+                .value_name("example.xlsx")
+                .help("the .xlsx input file")
+                .required(true)
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("o")
+                .short("o")
+                .long("out-file")
+                .value_name("munged.xml")
+                .help("the output file name")
+                .required(true)
+                .takes_value(true),
+        )
+        .get_matches();
+
+    let input = matches.value_of("i").unwrap();
+    let output = matches.value_of("o").unwrap();
+    let path = Path::new(output);
+    let display = path.display();
+    let mut file = match File::create(&path) {
+        Err(why) => panic!("couldn't create {}: {}", display, why),
+        Ok(file) => file,
+    };
+
+    let mut excel: Xlsx<_> = open_workbook(input).unwrap();
     let range = match excel.worksheet_range_at(0) {
         Some(Ok(r)) => {
             match r
@@ -112,5 +150,8 @@ fn main() {
         particles: particles,
     };
     let header = "<?xml version='1.0' encoding='UTF-8'?>";
-    println!("{}\n{}", header, track.xml())
+    match file.write_all(format!("{}\n{}", header, track.xml()).as_bytes()) {
+        Err(why) => panic!("couldn't write to {}: {}", display, why),
+        Ok(_) => println!("successfully wrote to {}", display),
+    }
 }
