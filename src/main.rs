@@ -102,6 +102,12 @@ fn main() {
     };
 
     let mut excel: Xlsx<_> = open_workbook(input).unwrap();
+
+    println!(
+        "===> bung munging\n===> source file: {}",
+        Path::new(input).display()
+    );
+
     let range = match excel.worksheet_range_at(0) {
         Some(Ok(r)) => {
             match r
@@ -152,6 +158,6 @@ fn main() {
     let header = "<?xml version='1.0' encoding='UTF-8'?>";
     match file.write_all(format!("{}\n{}", header, track.xml()).as_bytes()) {
         Err(why) => panic!("couldn't write to {}: {}", display, why),
-        Ok(_) => println!("successfully wrote to {}", display),
+        Ok(_) => println!("===> bung munged\n===> output file: {}", display),
     }
 }
