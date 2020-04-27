@@ -1,0 +1,21 @@
+bungmunger
+===========
+
+usage:
+
+# bungmunger --help
+bungmunger 0.1.0
+stuart nelson <stuartnelson3@gmail.com>
+munges xlsx trajectory files into xml
+
+USAGE:
+    bungmunger --in-file <example.xlsx> --out-file <munged.xml>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -i, --in-file <example.xlsx>    the .xlsx input file
+    -o, --out-file <munged.xml>     the output file name
+
